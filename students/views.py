@@ -18,7 +18,7 @@ class StudentGroupDetailView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StudentGroupDetailView, self).get_context_data(**kwargs)
-        student = Student.objects.all().filter(group__pk=kwargs['pk'])
+        student = Student.objects.filter(group__pk=kwargs['pk'])
         context['students'] = student
         return context
 
