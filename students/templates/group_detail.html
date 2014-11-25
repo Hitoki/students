@@ -1,0 +1,40 @@
+{% extends 'base.html'%}
+
+{% block main %}
+
+    <div class="container theme-showcase">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Second Name</th>
+                            <th>Birthday date</th>
+                            <th>Card id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="">
+                                    {{ student.first_name }}
+                                </a>
+                            </td>
+                            <td>{{ student.last_name }}</td>
+                            <td>{{ student.second_name }}</td>
+                            <td>{{ student.birth_date }}</td>
+                            <td>{{ student.student_card }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

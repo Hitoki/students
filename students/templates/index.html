@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            {% for studentgroup in object_list %}
+
+                <div class="col-md-4">
+                  <h2><a href="{% url 'group_detail' studentgroup.id %}">
+                          {{ studentgroup.title }}
+                      </a>
+                      <span class="badge">{{ studentgroup.student_set.all.count }}</span>
+                  </h2>
+                  <p>The group elder - {{ studentgroup.steward }}</p>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
