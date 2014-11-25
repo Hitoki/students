@@ -24,7 +24,7 @@ class Student(models.Model):
 
 class StudentGroup(models.Model):
     title = models.CharField(max_length=255)
-    steward = models.ForeignKey(Student)
+    steward = models.ForeignKey(Student, null=True, blank=True)
 
     def __unicode__(self):
         return self.title

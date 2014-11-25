@@ -1,11 +1,11 @@
-{% extends 'base.html'%}
-
+{% extends 'base.html' %}
 {% block main %}
 
-    <form action="" class="form-signin" role="form" method="post">
+    <form action="{% url "student_delete" pk=student.id %}" class="form-signin" role="form" method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"</p>
-        <input type="submit" value="Confirm"/>
+        <p>Are you sure you want to delete this student: "{{ object.student_name }}" profile? </p>
+        <input type="submit" value="Yes, Delete."/>
+        <a href="/"><button type="button" class="btn btn-danger">No, cancel</button></a>
     </form>
 
 {% endblock %}

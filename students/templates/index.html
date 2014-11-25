@@ -7,14 +7,22 @@
             {% for studentgroup in object_list %}
 
                 <div class="col-md-4">
-                  <h2><a href="{% url 'group_detail' studentgroup.id %}">
-                          {{ studentgroup.title }}
-                      </a>
-                      <span class="badge">{{ studentgroup.student_set.all.count }}</span>
-                  </h2>
-                  <p>The group elder - {{ studentgroup.steward }}</p>
-                </div>
+                    <div class="text-center">
+                        <h2><a href="{% url 'group_detail' studentgroup.id %}">
+                              {{ studentgroup.title }}
+                            </a>
+                            <span class="badge">{{ studentgroup.student_set.all.count }}</span>
+                        </h2>
+                        <p>The group elder - {{ studentgroup.steward }}</p>
 
+                        {% if studentgroup.id %}
+                            <a href="{% url 'group_delete' pk=studentgroup.id %}">
+                                You want delete this group?
+                            </a>
+                        {% endif %}
+
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>

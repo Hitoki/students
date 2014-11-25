@@ -9,13 +9,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src='http://code.jquery.com/jquery-1.7.1.js'></script>
-    <script>
-        $(function(){
-            $('table td:first-child').each(function (i) {
-                $(this).html(i+1);
-            });
-        });
-    </script>
     <title>Market</title>
 </head>
     <body>
@@ -32,12 +25,19 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><span class="label label-default">{{ user }}</span></li>
                         <li><a href="/add_new_group/">Add new group</a></li>
                         <li><a href="/add_new_student/">Add new student</a></li>
-                        <li><a href="/accounts/login/">Log In</a></li>
-                        <li><a href="/accounts/logout/">Log Out</a></li>
-                        <li><a href="/registration/">Registration</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="#">{{ user }}</a>
+                            </li>
+                            <li><a href="/accounts/logout/">Log Out</a></li>
+                        {% else %}
+                            <li><a href="/accounts/login/">Log In</a></li>
+                            <li><a href="/registration/">Registration</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

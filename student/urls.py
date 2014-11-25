@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth.views import logout, login
 from students.views import StudentGroupView, StudentGroupDetailView, RegistrationView,\
-    AddStudent, AddGroup, EditStudent, EditGroup, GroupDelete, StudentDelete
+    AddStudent, AddGroup, StudentUpdate, GroupUpdate, GroupDelete, StudentDelete, StudentProfileView
 
 urlpatterns = patterns('',
     # Examples:
@@ -12,13 +12,16 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', StudentGroupView.as_view(), name='index'),
     url(r'^group_detail/(?P<pk>\d+)/$', StudentGroupDetailView.as_view(), name='group_detail'),
+    url(r'^student_detail/(?P<pk>\d+)/$', StudentProfileView.as_view(), name='student_detail'),
 
     url(r'^add_new_student', AddStudent.as_view(), name='add_new_student'),
     url(r'^add_new_group', AddGroup.as_view(), name='add_new_group'),
-    url(r'^edit_student', EditStudent.as_view(), name='edit_student'),
-    url(r'^edit_group', EditGroup.as_view(), name='edit_group'),
-    url(r'^delete_student', StudentDelete.as_view(), name='delete_student'),
-    url(r'^delete_group', GroupDelete.as_view(), name='delete_group'),
+
+    url(r'^edit_student/(?P<pk>\d+)/$', StudentUpdate.as_view(), name='student_edit'),
+    url(r'^edit_group/(?P<pk>\d+)/$', GroupUpdate.as_view(), name='group_edit'),
+
+    url(r'^delete_student/(?P<pk>\d+)/$', StudentDelete.as_view(), name='student_delete'),
+    url(r'^delete_group/(?P<pk>\d+)/$', GroupDelete.as_view(), name='group_delete'),
 
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout),

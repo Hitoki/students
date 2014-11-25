@@ -6,11 +6,17 @@ class AddStudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = '__all__'
+        exclude = ['user']
 
 
 class AddGroupForm(forms.ModelForm):
 
     class Meta:
         model = StudentGroup
-        fields = '__all__'
+        fields = ['title']
+
+
+class EditGroupForm(forms.ModelForm):
+
+    class Meta:
+        model = StudentGroup
