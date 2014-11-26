@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from students.models import Student, StudentGroup
 
 
@@ -20,3 +21,4 @@ class EditGroupForm(forms.ModelForm):
 
     class Meta:
         model = StudentGroup
+

@@ -27,11 +27,9 @@
                             <td>{{ student.student_card }}</td>
                             <td><a href="{% url "student_detail" student.id %}">Detail</a></td>
                             <td>
-                                {% if student.id %}
-                                    <a href="{% url 'student_delete' pk=student.id %}">
-                                        Delete student profile?
-                                    </a>
-                                {% endif %}
+                                <a href="{% url 'student_edit' pk=student.id %}">
+                                    Edit student profile?
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

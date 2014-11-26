@@ -29,7 +29,6 @@
                         <li><a href="/add_new_student/">Add new student</a></li>
                     </ul>
                     <ul class="nav navbar-nav pull-right">
-                        <li>Develop</li>
                         {% if user.is_authenticated %}
                             <li>
                                 <a href="#">{{ user }}</a>
@@ -39,6 +38,7 @@
                             <li><a href="/accounts/login/">Log In</a></li>
                             <li><a href="/registration/">Registration</a></li>
                         {% endif %}
+                            <li><a href="/registration/email/">Registration email</a></li>
                     </ul>
                 </div>
             </div>

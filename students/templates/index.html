@@ -20,6 +20,10 @@
                                 You want delete this group?
                             </a>
                         {% endif %}
+                        <br>
+                        <a href="{% url 'group_edit' pk=studentgroup.id %}">
+                            or u want edit it?
+                        </a>
 
                     </div>
                 </div>
