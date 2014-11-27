@@ -1,0 +1,6 @@
+>>> git commit -a -m 'Commentariy'					- sohranit'
+>>> git push origin nazvanie_vetki(master esli v glavnuu)		- zapisat' na serv
+
+>>> git branch nazvanie_vetki						- sozdat' vetku
+>>> git checkout nazvanie_vetki						- pereiti k etoy vetke
+>>> git pull origin nazvanie_vetki(s kotoroy slivaem(esli na mastere to dobavlaem chto na nazvanie_vetki k masteru)

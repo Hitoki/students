@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+
+{% block main %}
+
+    <form action="{% url "group_delete" pk=studentgroup.id %}" class="form-signin" role="form" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete group: "{{ object }}"?</p>
+        <input type="submit" value="Yes, Delete."/>
+        <a href="/"><button type="button" class="btn btn-danger">No, cancel</button></a>
+    </form>
+
+{% endblock %}
