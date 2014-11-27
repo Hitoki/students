@@ -39,7 +39,7 @@ class RegistrationView(TemplateView):
         form = EmailUserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/accounts/login/')
+            return redirect(reverse('/accounts/login/'))
         return self.render_to_response({'form': form})
 
 
@@ -58,7 +58,7 @@ class AddStudent(TemplateView):
         form = AddStudentForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return reverse('home')
+            return redirect(reverse('index'))
         return self.render_to_response({'form': form})
 
 
@@ -77,7 +77,7 @@ class AddGroup(TemplateView):
         form = AddGroupForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return reverse('home')
+            return redirect(reverse('index'))
         return self.render_to_response({'form': form})
 
 

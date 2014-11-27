@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from django.db import connection
 from django.template import Template, Context
 
 
-class TimeSQLRe:
+class TimeSQLRequest(object):
 
     def process_response(self, request, response):
 
@@ -14,20 +15,20 @@ class TimeSQLRe:
         time = sum([float(q['time']) for q in connection.queries])
 
         template = Template('''<div class="debug">
-                <p>время выполнения запроса: {{ time }}</p>
-                <p>количество sql запросов: {{ count }}</p>
+                <p>sql time: {{ time }}</p>
+                <p>sql count: {{ count }}</p>
             <div>
             ''')
 
-        renderred_template = template.render(Context(dict(time=time, count=len(connection.queries))))
+        renderred_template = template.render(Context({'time': time, 'count': len(connection.queries)}))
 
 
-        content = response.content.decode('utf-8')
+        content = response.content.decode()
 
         body = '</body>'
         body_position = content.find(body)
         content = content[:body_position] + renderred_template + content[body_position:]
-        
-        response.content = content.encode('utf-8')
+
+        response.content = content.encode()
 
         return  response
