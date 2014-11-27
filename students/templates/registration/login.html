@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 
 {% block main %}
-
     {% if form.errors %}
         <p class="error">Sorry, that's not a valid username or password</p>
     {% endif %}
-
     <form action="" method="post" class="form-signin" role="form">
         {% csrf_token %}
         <h2 class="form-signin-heading">Please log in</h2>
@@ -16,5 +14,4 @@
         <input class="btn btn-lg btn-primary btn-block" type="submit" value="login" />
         <input type="hidden" name="next" value="/" />
     </form>
-
 {% endblock %}

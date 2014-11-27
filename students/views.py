@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView, DeleteView, UpdateView
 from students.models import Student, StudentGroup
+from django.template import RequestContext
 from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
 from django.contrib.auth.forms import UserCreationForm
 

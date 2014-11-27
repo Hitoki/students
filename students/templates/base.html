@@ -27,11 +27,12 @@
                     <ul class="nav navbar-nav">
                         <li><a href="/add_new_group/">Add new group</a></li>
                         <li><a href="/add_new_student/">Add new student</a></li>
+                        <li></li>
                     </ul>
                     <ul class="nav navbar-nav pull-right">
                         {% if user.is_authenticated %}
                             <li>
-                                <a href="#">{{ user }}</a>
+                                <a href="#">{{ user }} ( DEBUG={{ settings.DEBUG }} )</a>
                             </li>
                             <li><a href="/accounts/logout/">Log Out</a></li>
                         {% else %}

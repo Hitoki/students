@@ -31,4 +31,4 @@ class TimeSQLRequest(object):
 
         response.content = content.encode()
 
-        return  response
+        return response

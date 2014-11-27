@@ -24,6 +24,12 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'students.context_processor.add_settings',
+    'students.context_processor.login_form',
+)
+
 ALLOWED_HOSTS = []
 
 
