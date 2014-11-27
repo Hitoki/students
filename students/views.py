@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView, DeleteView, UpdateView
 from students.models import Student, StudentGroup
-from students.form import AddStudentForm, AddGroupForm, EmailPasswordCreationForm
+from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -32,29 +32,14 @@ class RegistrationView(TemplateView):
     template_name = 'registration/registration.html'
 
     def get(self, request, *args, **kwargs):
-        form = UserCreationForm()
+        form = EmailUserCreationForm()
         return self.render_to_response({'form': form})
 
     def post(self, request):
-        form = UserCreationForm(data=request.POST)
+        form = EmailUserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return reverse('registration')
-        return self.render_to_response({'form': form})
-
-
-class RegistrationEmailView(TemplateView):
-    template_name = 'registration/registration_email.html'
-
-    def get(self, request, *args, **kwargs):
-        form = EmailPasswordCreationForm()
-        return self.render_to_response({'form': form})
-
-    def post(self, request):
-        form = EmailPasswordCreationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return reverse('registration')
+            return redirect('/accounts/login/')
         return self.render_to_response({'form': form})
 
 

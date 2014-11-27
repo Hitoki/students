@@ -91,7 +91,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTHENTICATION_BACKENDS = (
-    'students.auth_backends.EmailBackend'
+    'students.auth_backends.EmailBackend',
 )
 
 

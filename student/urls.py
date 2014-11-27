@@ -1,9 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth.views import logout, login
-from students.views import StudentGroupView, StudentGroupDetailView, RegistrationView,\
-    AddStudent, AddGroup, StudentUpdate, GroupUpdate, GroupDelete, StudentDelete, StudentProfileView, \
-    RegistrationEmailView
+from students.views import StudentGroupView, StudentGroupDetailView, RegistrationView, \
+    AddStudent, AddGroup, StudentUpdate, GroupUpdate, GroupDelete, StudentDelete, StudentProfileView
 
 urlpatterns = patterns('',
     # Examples:
@@ -27,5 +26,4 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', login, name='login'),
     url(r'^accounts/logout/$', logout, name='logout'),
     url(r'^registration/$', RegistrationView.as_view(), name='registration'),
-    url(r'^registration/email/$', RegistrationEmailView.as_view(), name='registration_email'),
 )
