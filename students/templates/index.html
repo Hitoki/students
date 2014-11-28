@@ -19,7 +19,7 @@
                         {% if studentgroup.id %}
                             <a href="{% url 'group_delete' pk=studentgroup.id %}">
                                 You want delete this group?
-                            </a>
+                            </a> | {% admin_edit group_delete 'edit_admin' %}
                         {% endif %}
                         <br>
                         <a href="{% url 'group_edit' pk=studentgroup.id %}">
