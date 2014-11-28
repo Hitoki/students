@@ -40,7 +40,7 @@ class RegistrationView(TemplateView):
         form = EmailUserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('/accounts/login/'))
+            return redirect(reverse('login'))
         return self.render_to_response({'form': form})
 
 
