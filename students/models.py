@@ -10,7 +10,6 @@ class Student(models.Model):
     birth_date = models.DateField(auto_now=False)
     student_card = models.IntegerField()
     group = models.ForeignKey('StudentGroup')
-    user = models.OneToOneField(User, null=True, blank=True)
 
     def __unicode__(self):
         return self.second_name
