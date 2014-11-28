@@ -120,7 +120,7 @@ class GroupUpdate(UpdateView):
 class StudentDelete(DeleteView):
     model = Student
     template_name = "student_confirm_delete.html"
-    success_url = "home"
+    success_url = "/"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -130,7 +130,7 @@ class StudentDelete(DeleteView):
 class GroupDelete(DeleteView):
     model = StudentGroup
     template_name = "group_confirm_delete.html"
-    success_url = "home"
+    success_url = "/"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

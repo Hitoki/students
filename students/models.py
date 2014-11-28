@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import pre_save, pre_delete
+from django.dispatch import receiver
 
 
 class Student(models.Model):
@@ -27,3 +27,36 @@ class StudentGroup(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class Log(models.Model):
+    add_date = models.DateTimeField(auto_now=True)
+    log = models.CharField(max_length=255)
+    model = models.CharField(max_length=125, null=True, blank=True)
+
+    def __unicode__(self):
+        return str(self.add_date)
+
+@receiver(pre_save, sender=Student)
+@receiver(pre_save, sender=StudentGroup)
+def stud_and_group_saver(sender, instance, **kwargs):
+    saver = Log()
+    saver.model = str(sender._meta.model_name)
+
+    try:
+        sender.objects.get(pk=instance.pk)
+        saver.log = 'edit'
+
+    except sender.DoesNotExist:
+        saver.log = 'create'
+
+    saver.log = 'Object {} {}'.format(instance, saver.log)
+    saver.save()
+
+@receiver(pre_delete, sender=Student)
+@receiver(pre_delete, sender=StudentGroup)
+def stud_adn_group_delete(sender, instance, **kwargs):
+    deleter = Log()
+    deleter.model = str(sender._meta.model_name)
+    deleter.log = 'Object {} was deleted'.format(instance)
+    deleter.save()
