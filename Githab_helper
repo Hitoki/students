@@ -1,5 +1,6 @@
 >>> git commit -a -m 'Commentariy'					- sohranit'
 >>> git push origin nazvanie_vetki(master esli v glavnuu)		- zapisat' na serv
+>>> git add .                           - add all new files
 
 >>> git branch nazvanie_vetki						- sozdat' vetku
 >>> git checkout nazvanie_vetki						- pereiti k etoy vetke
