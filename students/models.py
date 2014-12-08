@@ -18,7 +18,7 @@ class Student(models.Model):
         ordering = ['last_name']
 
     def student_name(self):
-        return self.first_name + self.last_name + self.second_name
+        return "{} {} {}".format(self.first_name, self.last_name, self.second_name)
 
 
 class StudentGroup(models.Model):
@@ -37,6 +37,7 @@ class Log(models.Model):
     def __unicode__(self):
         return str(self.add_date)
 
+
 @receiver(pre_save, sender=Student)
 @receiver(pre_save, sender=StudentGroup)
 def stud_and_group_saver(sender, instance, **kwargs):
@@ -52,6 +53,7 @@ def stud_and_group_saver(sender, instance, **kwargs):
 
     saver.log = 'Object {} {}'.format(instance, saver.log)
     saver.save()
+
 
 @receiver(pre_delete, sender=Student)
 @receiver(pre_delete, sender=StudentGroup)

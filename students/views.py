@@ -1,12 +1,10 @@
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, render_to_response, redirect, get_object_or_404
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, TemplateView, DeleteView, UpdateView
+from django.views.generic import ListView, DetailView, TemplateView, DeleteView, UpdateView, CreateView
 from students.models import Student, StudentGroup
-from django.template import RequestContext
 from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
-from django.contrib.auth.forms import UserCreationForm
 
 
 class StudentGroupView(ListView):
@@ -44,93 +42,69 @@ class RegistrationView(TemplateView):
         return self.render_to_response({'form': form})
 
 
-class AddStudent(TemplateView):
+class AddStudent(CreateView):
     template_name = 'add_new_student.html'
-
-    def get(self, request, *args, **kwargs):
-        form = AddStudentForm()
-        return self.render_to_response({'form': form})
+    model = Student
+    form_class = AddStudentForm
+    success_url = reverse_lazy('index')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(AddStudent, self).dispatch(*args, **kwargs)
 
-    def post(self, request):
-        form = AddStudentForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('index'))
-        return self.render_to_response({'form': form})
 
-
-class AddGroup(TemplateView):
+class AddGroup(CreateView):
     template_name = 'add_new_group.html'
-
-    def get(self, request, *args, **kwargs):
-        form = AddGroupForm()
-        return self.render_to_response({'form': form})
+    model = StudentGroup
+    form_class = AddGroupForm
+    success_url = reverse_lazy('index')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(AddGroup, self).dispatch(*args, **kwargs)
-
-    def post(self, request):
-        form = AddGroupForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('index'))
-        return self.render_to_response({'form': form})
 
 
 class StudentUpdate(UpdateView):
     form_class = AddStudentForm
     model = Student
     template_name = "edit_student.html"
-    success_url = "/"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(StudentUpdate, self).dispatch(*args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(StudentUpdate, self).get_context_data(**kwargs)
-        context['student_update'] = reverse('student_edit',
-                                            kwargs={'pk': self.get_object().id})
-
-        return context
+    def get_success_url(self):
+        studentgroup_id = self.object.group.id
+        return reverse('group_detail', args=(studentgroup_id, ))
 
 
 class GroupUpdate(UpdateView):
     model = StudentGroup
     template_name = "edit_group.html"
-    success_url = "/"
+    success_url = reverse_lazy('index')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(GroupUpdate, self).dispatch(*args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(GroupUpdate, self).get_context_data(**kwargs)
-        context['group_update'] = reverse('group_edit',
-                                            kwargs={'pk': self.get_object().id})
-
-        return context
-
 
 class StudentDelete(DeleteView):
     model = Student
     template_name = "student_confirm_delete.html"
-    success_url = "/"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(StudentDelete, self).dispatch(*args, **kwargs)
 
+    def get_success_url(self):
+        studentgroup_id = self.object.group.id
+        return reverse('group_detail', args=(studentgroup_id, ))
+
 
 class GroupDelete(DeleteView):
     model = StudentGroup
     template_name = "group_confirm_delete.html"
-    success_url = "/"
+    success_url = reverse_lazy('index')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os, sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -69,7 +69,7 @@ WSGI_APPLICATION = 'student.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
     }
 }
 
@@ -101,4 +101,7 @@ AUTHENTICATION_BACKENDS = (
     'students.auth_backends.EmailBackend',
 )
 
-
+if 'test' in sys.argv:
+    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3'}}
+    MIGRATION_MODULES = dict([(app, 'students.migrations_not_used_in_tests')
+                              for app in INSTALLED_APPS])
