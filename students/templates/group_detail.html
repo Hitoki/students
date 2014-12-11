@@ -17,7 +17,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for student in students %}
+                    {% for student in studentgroup.student_set.all %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ student.first_name }}</td>
@@ -27,7 +27,7 @@
                             <td>{{ student.student_card }}</td>
                             <td><a href="{% url "student_detail" student.id %}">Detail</a></td>
                             <td>
-                                <a href="{% url 'student_edit' pk=student.id %}">
+                                <a href="{% url 'student_edit' student.id %}">
                                     Edit student profile?
                                 </a>
                             </td>

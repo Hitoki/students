@@ -12,14 +12,9 @@ class StudentGroupView(ListView):
     template_name = 'index.html'
 
 
-class StudentGroupDetailView(TemplateView):
+class StudentGroupDetailView(DetailView):
+    model = StudentGroup
     template_name = 'group_detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(StudentGroupDetailView, self).get_context_data(**kwargs)
-        student = Student.objects.filter(group__pk=kwargs['pk'])
-        context['students'] = student
-        return context
 
 
 class StudentProfileView(DetailView):
