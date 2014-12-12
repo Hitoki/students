@@ -1,8 +1,8 @@
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, TemplateView, DeleteView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from students.models import Student, StudentGroup
 from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
 
@@ -22,19 +22,26 @@ class StudentProfileView(DetailView):
     template_name = 'student_detail.html'
 
 
-class RegistrationView(TemplateView):
+# class RegistrationView(TemplateView):
+#     template_name = 'registration/registration.html'
+#
+#     def get(self, request, *args, **kwargs):
+#         form = EmailUserCreationForm()
+#         return self.render_to_response({'form': form})
+#
+#     def post(self, request):
+#         form = EmailUserCreationForm(data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(reverse('login'))
+#         return self.render_to_response({'form': form})
+
+
+class RegistrationView(CreateView):
     template_name = 'registration/registration.html'
-
-    def get(self, request, *args, **kwargs):
-        form = EmailUserCreationForm()
-        return self.render_to_response({'form': form})
-
-    def post(self, request):
-        form = EmailUserCreationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('login'))
-        return self.render_to_response({'form': form})
+    model = User
+    form_class = EmailUserCreationForm
+    success_url = reverse_lazy('login')
 
 
 class AddStudent(CreateView):
