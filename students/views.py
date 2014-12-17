@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from students.models import Student, StudentGroup
 from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
+
 
 
 class StudentGroupView(ListView):
