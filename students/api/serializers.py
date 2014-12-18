@@ -19,17 +19,20 @@ class UserSerializer(ModelSerializer):
         return diff.days
 
 
-# class StudentSerializer(serializers.ModelSeriializer):
-#     class Meta:
-#         model = Student
-#         fields = ('id', 'first_name', 'second_name', 'last_name',
-#                   'birth_date', 'student_card', 'group')
-#
-#
-# class StudentGroupSerializer(serializers.ModelSeriializer):
-#     class Meta:
-#         model = StudentGroup
-#         fields = ('title', 'steward')
+class StudentSerializer(ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ('id', 'first_name', 'second_name', 'last_name',
+                  'birth_date', 'student_card', 'group')
+
+
+class StudentGroupSerializer(ModelSerializer):
+
+    # students = StudentSerializer(source='student_set')
+
+    class Meta:
+        model = StudentGroup
+        fields = ('title', 'steward',)
 
 
 

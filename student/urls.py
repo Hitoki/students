@@ -8,12 +8,12 @@ from students.api import views
 
 router = DefaultRouter()
 router.register(r'users', views.UserView, base_name='users')
+router.register(r'students', views.StudentView, base_name='students')
+router.register(r'students_groups', views.StudentGroupView, base_name='students_groups')
 
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'student.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
+
     url(r'^api/v1/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', StudentGroupView.as_view(), name='index'),

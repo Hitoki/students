@@ -1,0 +1,38 @@
+{% extends 'base.html'%}
+{% load custom_tags %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            {% for studentgroup in object_list %}
+
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <h2><a href="{% url 'group_detail' studentgroup.id %}">
+                              {{ studentgroup.title }}
+                            </a>
+                            <span class="badge">{{ studentgroup.student_set.all.count }}</span>
+                        </h2>
+                        <p>The group elder - {{ studentgroup.steward }}</p>
+
+                        {% if studentgroup.id %}
+                            <a href="{% url 'group_delete' studentgroup.id %}">
+                                You want delete this group?
+                            </a> |
+                            {% if user.is_staff  %}
+                                {% admin_edit studentgroup %}
+                            {% endif %}
+                        {% endif %}
+                        <br>
+                        <a href="{% url 'group_edit' studentgroup.id %}">
+                            or u want edit it?
+                        </a>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,38 +1,78 @@
 {% extends 'base.html'%}
 {% load custom_tags %}
 
-{% block main %}
+{% block students %}
+    {% verbatim %}
+    <div class="list-group">
+            <table class="table table-striped">
+                <caption><h4>Students:</h4></caption>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Second name</th>
+                        <th>Last name</th>
+                        <th>Birth date</th>
+                        <th>Card id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="student in student.students">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ student.first_name }}</td>
+                        <td>{{ student.second_name }}</td>
+                        <td>{{ student.last_name }}</td>
+                        <td>{{ student.birth_date }}</td>
+                        <td>{{ student.student_card }}</td>
+                    </tr>
 
-    <div class="container">
-        <div class="row">
-            {% for studentgroup in object_list %}
+                </tbody>
+            </table>
+    </div>
 
-                <div class="col-md-4">
-                    <div class="text-center">
-                        <h2><a href="{% url 'group_detail' studentgroup.id %}">
-                              {{ studentgroup.title }}
-                            </a>
-                            <span class="badge">{{ studentgroup.student_set.all.count }}</span>
-                        </h2>
-                        <p>The group elder - {{ studentgroup.steward }}</p>
+    {% endverbatim %}
+{% endblock %}
 
-                        {% if studentgroup.id %}
-                            <a href="{% url 'group_delete' studentgroup.id %}">
-                                You want delete this group?
-                            </a> |
-                            {% if user.is_staff  %}
-                                {% admin_edit studentgroup %}
-                            {% endif %}
-                        {% endif %}
-                        <br>
-                        <a href="{% url 'group_edit' studentgroup.id %}">
-                            or u want edit it?
-                        </a>
+{% block groups %}
+    {% verbatim %}
+    <div class="row">
+        <div class="col-xs-6 col-md-3" ng-repeat="group in group.students_groups">
+            <h1 class="alert alert-success" >{{ group.title }}</h1>
 
-                    </div>
-                </div>
-            {% endfor %}
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>Student list</button>
+                <button type="button" class="btn alert-danger">Delete</button>
+            </div>
+            <div class="list-group">
+            <table class="table table-striped">
+                <caption><h4>Students:</h4></caption>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Second name</th>
+                        <th>Last name</th>
+                        <th>Birth date</th>
+                        <th>Card id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="student in student.students | studentInstudents_group: students_group:id">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ student.first_name }}</td>
+                        <td>{{ student.second_name }}</td>
+                        <td>{{ student.last_name }}</td>
+                        <td>{{ student.birth_date }}</td>
+                        <td>{{ student.student_card }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+    </div>
         </div>
     </div>
 
+
+    {% endverbatim %}
 {% endblock %}

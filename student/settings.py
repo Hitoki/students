@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os, sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +28,7 @@ TEMPLATE_DEBUG = True
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'students.context_processor.add_settings',
+    'django.core.context_processors.static',
     'students.context_processor.login_form',
 )
 
@@ -55,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'students.middlewares.TimeSQLRequest'
+    # 'students.middlewares.TimeSQLRequest'
 )
 
 ROOT_URLCONF = 'student.urls'
