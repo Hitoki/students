@@ -1,0 +1,23 @@
+                <table class="table table-striped">
+                    <caption><h4>Students:</h4></caption>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Second name</th>
+                                <th>Last name</th>
+                                <th>Birth date</th>
+                                <th>Card id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="student in group.students">
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ student.first_name }}</td>
+                                <td>{{ student.second_name }}</td>
+                                <td>{{ student.last_name }}</td>
+                                <td>{{ student.birth_date }}</td>
+                                <td>{{ student.student_card }}</td>
+                            </tr>
+                        </tbody>
+                </table>
