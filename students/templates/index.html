@@ -25,7 +25,6 @@
                         <td>{{ student.birth_date }}</td>
                         <td>{{ student.student_card }}</td>
                     </tr>
-
                 </tbody>
             </table>
     </div>
@@ -35,44 +34,57 @@
 
 {% block groups %}
     {% verbatim %}
-    <div class="row">
-        <div class="col-xs-6 col-md-3" ng-repeat="group in group.students_groups">
+    <div class="row" role="tabpanel">
+        <div class="col-xs-6 col-md-6 alert alert-success" ng-repeat="group in group.students_groups">
             <h1 class="alert alert-success" >{{ group.title }}</h1>
 
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>Student list</button>
-                <button type="button" class="btn alert-danger">Delete</button>
-            </div>
-            <div class="list-group">
-            <table class="table table-striped">
-                <caption><h4>Students:</h4></caption>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Second name</th>
-                        <th>Last name</th>
-                        <th>Birth date</th>
-                        <th>Card id</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="student in student.students | studentInstudents_group: students_group:id">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ student.first_name }}</td>
-                        <td>{{ student.second_name }}</td>
-                        <td>{{ student.last_name }}</td>
-                        <td>{{ student.birth_date }}</td>
-                        <td>{{ student.student_card }}</td>
-                    </tr>
+            <student-tabs></student-tabs>
 
-                </tbody>
-            </table>
-    </div>
+            <ul class="nav nav-tabs">
+                <li>
+                    <a href="#list-tab-{{ group.id }}" data-toggle="tab">Student list<i class="fa"></i></a>
+                </li>
+                <li>
+                    <a href="#change-tab" data-toggle="tab">Change group<i class="fa"></i></a>
+                </li>
+            </ul>
+
         </div>
     </div>
 
-
+    <script type="text/ng-template" id="student-tabs.html">
+        <div class="tab-content">
+            <div class="tab-pane" id="list-tab-{{ group.id }}">
+                <table class="table table-striped">
+                    <caption><h4>Students:</h4></caption>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Second name</th>
+                                <th>Last name</th>
+                                <th>Birth date</th>
+                                <th>Card id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="student in group.students">
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ student.first_name }}</td>
+                                <td>{{ student.second_name }}</td>
+                                <td>{{ student.last_name }}</td>
+                                <td>{{ student.birth_date }}</td>
+                                <td>{{ student.student_card }}</td>
+                            </tr>
+                        </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="change-tab">
+                <h5>ddd</h5>
+            </div>
+        </div>
+    </script>
     {% endverbatim %}
+
+
 {% endblock %}

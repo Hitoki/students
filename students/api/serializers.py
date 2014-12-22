@@ -20,6 +20,7 @@ class UserSerializer(ModelSerializer):
 
 
 class StudentSerializer(ModelSerializer):
+
     class Meta:
         model = Student
         fields = ('id', 'first_name', 'second_name', 'last_name',
@@ -28,11 +29,11 @@ class StudentSerializer(ModelSerializer):
 
 class StudentGroupSerializer(ModelSerializer):
 
-    # students = StudentSerializer(source='student_set')
+    students = StudentSerializer(source='student_set.all', many=True)
 
     class Meta:
         model = StudentGroup
-        fields = ('title', 'steward',)
+        fields = ('id', 'title', 'steward', 'students')
 
 
 

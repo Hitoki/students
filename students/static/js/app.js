@@ -1,14 +1,6 @@
 (function() {
-    var app = angular.module('students', ['ngRoute']);
-    app.config(function($routeProvider, $locationProvider) {
-        $routeProvider.when('', {
-            controller: 'StudentsController'
-        });
-//        .when('/Book/:bookId/ch/:chapterId', {
-//            templateUrl: 'chapter.html',
-//            controller: 'ChapterController'
-//        });
-    });
+    var app = angular.module('students', []);
+
     app.controller('StudentsController', ['$http', function ($http) {
         var student = this;
         student.students = [];
