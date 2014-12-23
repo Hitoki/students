@@ -2,7 +2,7 @@
 
 {% block main %}
 
-    <form action="" method="post" class="form-signin" role="form">
+    <form action="{% url 'registration' %}" method="post" class="form-signin" role="form">
         {% csrf_token %}
         <h2 class="form-signin-heading">Registration</h2>
 

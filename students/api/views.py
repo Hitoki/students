@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet, ModelViewSet
 from students.api.serializers import UserSerializer, StudentSerializer, StudentGroupSerializer
 from students.models import Student, StudentGroup
 
@@ -23,12 +23,11 @@ class StudentView(ViewSet):
         return Response(data)
 
 
-class StudentGroupView(ViewSet):
+class StudentGroupView(ModelViewSet):
 
-    def list(self, request):
-        groups = StudentGroup.objects.all()
-        data = StudentGroupSerializer(groups, many=True).data
+    serializer_class = StudentGroupSerializer
 
-        return Response(data)
+    def get_queryset(self):
+        return StudentGroup.objects.all()
 
 

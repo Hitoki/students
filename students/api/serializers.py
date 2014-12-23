@@ -24,12 +24,13 @@ class StudentSerializer(ModelSerializer):
     class Meta:
         model = Student
         fields = ('id', 'first_name', 'second_name', 'last_name',
-                  'birth_date', 'student_card', 'group')
+                  'birth_date', 'student_card', 'group', 'student_name',)
 
 
 class StudentGroupSerializer(ModelSerializer):
 
     students = StudentSerializer(source='student_set.all', many=True)
+    steward = StudentSerializer(many=False)
 
     class Meta:
         model = StudentGroup

@@ -1,0 +1,14 @@
+.scrollbox {
+    height: 100px;
+    width: 300px;
+    border: 1px solid #C1C1C1;
+    border-radius: 25px;
+    overflow-y: scroll;
+    background: #c1b3ba;
+}
+ul {
+    list-style: none;
+}
+.lister {
+    color: #5e56c1;
+}

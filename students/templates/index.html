@@ -1,90 +1,99 @@
 {% extends 'base.html'%}
 {% load custom_tags %}
 
-{% block students %}
-    {% verbatim %}
-    <div class="list-group">
-            <table class="table table-striped">
-                <caption><h4>Students:</h4></caption>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Second name</th>
-                        <th>Last name</th>
-                        <th>Birth date</th>
-                        <th>Card id</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="student in student.students">
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ student.first_name }}</td>
-                        <td>{{ student.second_name }}</td>
-                        <td>{{ student.last_name }}</td>
-                        <td>{{ student.birth_date }}</td>
-                        <td>{{ student.student_card }}</td>
-                    </tr>
-                </tbody>
-            </table>
-    </div>
 
-    {% endverbatim %}
+
+{% block students %}
+{#    {% verbatim %}#}
+{#    <h5>All students:</h5>#}
+{#    <div class="scrollbox">#}
+{##}
+{#        <ul>#}
+{#            <li ng-repeat="student in student.students" class="lister" custom-popover popover-placement="right" popover-label="{{student.student_name}}" popover-html="#}
+{#                  <ul>#}
+{#                    <li>{{ student.first_name }} {{ student.second_name }} {{ student.last_name }}</li>#}
+{#                    <li>Birth data: {{ student.birth_date }}</li>#}
+{#                    <li>Card id: {{ student.student_card }}</li>#}
+{#                  </ul>">#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{##}
+{#    {% endverbatim %}#}
 {% endblock %}
 
 {% block groups %}
     {% verbatim %}
-    <div class="row" role="tabpanel">
-        <div class="col-xs-6 col-md-6 alert alert-success" ng-repeat="group in group.students_groups">
-            <h1 class="alert alert-success" >{{ group.title }}</h1>
+        <div class="container" ng-controller="GroupsController as group">
+            <div class="col-xs-6 col-md-4" ng-repeat="group in students_groups">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ group.title }}
+                        <div class="btn-group pull-right" role="group">
+                            <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" ng-click="showEditForm(group)"></span></button>
+                            <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"> </span></button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <span>{{ group.steward.student_name }}
+                            <button class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#student-list-{{ group.id }}">
+                                <span class="glyphicon glyphicon-list"></span>
+                            </button>
+                        </span>
+                        <span ng-hide="group.steward">No Steward Yet. <button class="btn btn-link btn-xs" ng-click="showEditForm(group)">Edit?</button></span>
+                    </div>
+                </div>
 
-            <student-tabs></student-tabs>
+                <div class="modal fade" id="student-list-{{ group.id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Students List of group - {{ group.title }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table">
+                                    <tr ng-repeat="student in group.students">
+                                        <td>{{ student.student_name }}</td>
+                                        <td>{{ student.birth_date }}</td>
+                                        <td>{{ student.student_card }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <ul class="nav nav-tabs">
-                <li>
-                    <a href="#list-tab-{{ group.id }}" data-toggle="tab">Student list<i class="fa"></i></a>
-                </li>
-                <li>
-                    <a href="#change-tab" data-toggle="tab">Change group<i class="fa"></i></a>
-                </li>
-            </ul>
-
-        </div>
-    </div>
-
-    <script type="text/ng-template" id="student-tabs.html">
-        <div class="tab-content">
-            <div class="tab-pane" id="list-tab-{{ group.id }}">
-                <table class="table table-striped">
-                    <caption><h4>Students:</h4></caption>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Second name</th>
-                                <th>Last name</th>
-                                <th>Birth date</th>
-                                <th>Card id</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="student in group.students">
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ student.first_name }}</td>
-                                <td>{{ student.second_name }}</td>
-                                <td>{{ student.last_name }}</td>
-                                <td>{{ student.birth_date }}</td>
-                                <td>{{ student.student_card }}</td>
-                            </tr>
-                        </tbody>
-                </table>
             </div>
-            <div class="tab-pane" id="change-tab">
-                <h5>ddd</h5>
+            <div class="modal fade" id="edit-group">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Edit group</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" class="form-signin" role="form">
+                                <div class="form-group">
+                                    <label for="title">Group title:</label>
+                                    <input class="form-control" type="text" id="title" ng-model="edit_group.title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="steward">Edit Steward:</label>
+                                    <select class="form-control" id="steward" ng-model="edit_group.steward" ng-options="obj.student_name for obj in edit_group.students track by obj.id"></select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input class="btn btn-primary" type="button" value="Confirm" ng-click="saveGroup()" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </script>
     {% endverbatim %}
-
 
 {% endblock %}

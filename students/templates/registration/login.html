@@ -4,7 +4,7 @@
     {% if form.errors %}
         <p class="error">Sorry, that's not a valid username or password</p>
     {% endif %}
-    <form action="" method="post" class="form-signin" role="form">
+    <form action="{% url 'login' %}" method="post" class="form-signin" role="form">
         {% csrf_token %}
         <h2 class="form-signin-heading">Please log in</h2>
         <label for="username">User name:</label>

@@ -12,27 +12,53 @@
     <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static "css/all.css" %}">
+    <script src="{% static "js/angular-cookie.js" %}"></script>
     <script src="{% static "js/app.js" %}"></script>
     <script src="{% static "js/student.js" %}"></script>
-
 
     <title>Students</title>
 </head>
     <body ng-controller="StudentsController as student">
-        <header>
-            <h1 class="text-center">Group list</h1>
-        </header>
-
+        <nav class="'navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Home</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">Add new group</a></li>
+                        <li><a href="#">Add new student</a></li>
+                        <li></li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                         {% if user.is_authenticated %}
+                            <li>
+                                <a href="#">{{ user }} ( DEBUG={{ settings.DEBUG }} )</a>
+                            </li>
+                            <li><a href="/accounts/logout/">Log Out</a></li>
+                        {% else %}
+                            <li><a href="/accounts/login/">Log In</a></li>
+                            <li><a href="/registration/">Registration</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+            <div class="page-header">
+                <h1></h1>
+            </div>
 
         {% block students %}
         {% endblock %}
 
-    <div ng-controller="GroupsController as group">
+    <div>
 
         {% block groups %}
         {% endblock %}
 
     </div>
-
+    {% block main %}
+    {% endblock %}
     </body>
 </html>
