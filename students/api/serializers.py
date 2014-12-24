@@ -37,6 +37,29 @@ class StudentGroupSerializer(ModelSerializer):
         fields = ('id', 'title', 'steward', 'students')
 
 
+    def create(self, validated_data):
+        steward_data = validated_data.pop('steward')
+        group = StudentGroup.objects.create(**validated_data)
+        Student.objects.create(group=group, **steward_data)
+        return group
+
+    def __delete__(self, instance):
+        pass
+
+    def update(self, instance, validated_data):
+        steward_data = validated_data.pop('steward')
+
+        steward = None
+        if steward_data:
+            steward = Student.objects.get(**steward_data)
+
+        instance.title = validated_data.get('title', instance.title)
+        instance.steward = steward
+        instance.save()
+
+        return instance
+
+
 
 # class Log(models.Model):
 #     add_date = models.DateTimeField(auto_now=True)

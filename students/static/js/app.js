@@ -21,11 +21,11 @@
 
         $scope.students_groups = [];
         $scope.edit_group = {};
+        $scope.add_group = {};
 
         $http.get('/api/v1/students_groups/').success(function (data) {
             console.log(data);
             $scope.students_groups = data;
-
         });
 
         $scope.showEditForm = function (group) {
@@ -35,9 +35,27 @@
 
         $scope.saveGroup = function () {
             $http.put('/api/v1/students_groups/'+$scope.edit_group.id, $scope.edit_group).success(function () {
-                angular.element('#edit-group').modal('close');
+                angular.element('#edit-group').modal('hide');
             })
-        }
+        };
+
+
+
+        $scope.updateGroup = function (group) {
+            $scope.edit_group = angular.copy(group)
+        };
+
+        $scope.showAddForm = function (group){
+            $scope.add_group = group;
+            angular.element('#add-group').modal('show');
+        };
+
+        $scope.addGroup = function (group){
+            $http.put('/api/v1/students_groups/'+$scope.add_group.id, $scope.add_group).success(function () {
+                angular.element('#add-group').modal('close');
+            })
+        };
+
     });
 
     app.directive('customPopover', function () {
