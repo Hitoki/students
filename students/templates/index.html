@@ -27,10 +27,11 @@
         <div class="container" ng-controller="GroupsController as group">
             <div class="col-xs-6 col-md-4" ng-repeat="group in students_groups">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{ group.title }}
+                    <div class="panel-heading">{{ group.title }} <span class="badge" title="{{ group.students.length }} student(s) in group" >{{ group.students.length }}</span>
                         <div class="btn-group pull-right" role="group">
-                            <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" ng-click="showEditForm(group)"></span></button>
-                            <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+                            <button title="Edit group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" ng-click="showEditForm(group)"></span></button>
+                            <button title="Add new student to the group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+                            <button title="Delete group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" ng-click="deleteGroup($index, group.id)"></span></button>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -72,7 +73,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Edit group</h4>
+                            <h4 class="modal-title">Edit {{ edit_group.title }} group</h4>
                         </div>
                         <div class="modal-body">
                             <form action="" method="post" class="form-signin" role="form">
@@ -87,7 +88,7 @@
                                 <div class="form-group">
                                     <label for="students">Edit Students:</label>
                                         <div ng-repeat="student in edit_group.students" id="students">
-                                            <input type="checkbox" name="option-{{ student.id }}" value="value-{{ student.id }}">{{ student.student_name }}<br>
+                                            {{ student.student_name }}<button title="Delete student" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" ng-click="showDeleteForm(student)"></span></button><br>
 
                                         </div>
                                     </div>
@@ -131,6 +132,22 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="delete-student">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Delete {{ students_groups.students.student_name }} student profile?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input class="btn btn-primary" type="button" value="Delete" ng-click="deleteStudent($index)"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     {% endverbatim %}
 

@@ -36,15 +36,11 @@ class StudentGroupSerializer(ModelSerializer):
         model = StudentGroup
         fields = ('id', 'title', 'steward', 'students')
 
-
     def create(self, validated_data):
         steward_data = validated_data.pop('steward')
         group = StudentGroup.objects.create(**validated_data)
         Student.objects.create(group=group, **steward_data)
         return group
-
-    def __delete__(self, instance):
-        pass
 
     def update(self, instance, validated_data):
         steward_data = validated_data.pop('steward')

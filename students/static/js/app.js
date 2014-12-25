@@ -22,6 +22,7 @@
         $scope.students_groups = [];
         $scope.edit_group = {};
         $scope.add_group = {};
+        $scope.delete_group = {};
 
         $http.get('/api/v1/students_groups/').success(function (data) {
             console.log(data);
@@ -39,23 +40,42 @@
             })
         };
 
-
-
-        $scope.updateGroup = function (group) {
-            $scope.edit_group = angular.copy(group)
+        $scope.deleteGroup = function (index, id) {
+            $http.delete('/api/v1/students_groups/'+id).success(function(){
+                $scope.students_groups.splice(index, 1);
+            });
         };
 
-        $scope.showAddForm = function (group){
-            $scope.add_group = group;
-            angular.element('#add-group').modal('show');
+
+
+        $scope.showDeleteForm = function (student) {
+            $scope.students_groups.students = student;
+            angular.element('#delete-student').modal('show');
         };
 
-        $scope.addGroup = function (group){
-            $http.put('/api/v1/students_groups/'+$scope.add_group.id, $scope.add_group).success(function () {
-                angular.element('#add-group').modal('close');
-            })
-        };
+        $scope.deleteStudent = function (index, id) {
 
+            $http.delete('/api/v1/students_delete/'+id).success(function(){
+                $scope.students_groups.students.splice(index, 1).success(function () {
+                angular.element('#delete-student').modal('hide');
+            });
+        });
+
+
+
+
+//        $scope.showAddForm = function (group){
+//            $scope.add_group = group;
+//            angular.element('#add-group').modal('show');
+//        };
+//
+//        $scope.addGroup = function (group){
+//            $http.put('/api/v1/students_groups/'+$scope.add_group.id, $scope.add_group).success(function () {
+//                angular.element('#add-group').modal('close');
+//            })
+//        };
+
+        }
     });
 
     app.directive('customPopover', function () {
