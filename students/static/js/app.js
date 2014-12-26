@@ -14,21 +14,27 @@
         $scope.delete_student = {};
 
         $http.get('/api/v1/students/').success(function (data) {
-            console.log(data);
             $scope.students = data;
         });
 
-        $scope.showAddStudentForm = function (student) {
-            $scope.add_student = student;
+        $scope.showAddStudentForm = function () {
+            $scope.add_student = {
+                first_name: null,
+                second_name: null,
+                last_name: null,
+                birth_date: null,
+                student_card: null,
+                group: null
+            };
             angular.element('#add-student').modal('show');
         };
 
 
         $scope.createStudent = function(){
-            $http.put('/api/v1/students/', $scope.students)
-                .success(function(response){
-                    $scope.students.push(response.students);
-                    })
+            $scope.add_student.group = $scope.add_student.group.id;
+            $http.post('/api/v1/students/', $.param($scope.add_student)).success(function(data){
+                $scope.students.push(data);
+            });
         };
 
         $scope.deleteStudent = function (index, id) {

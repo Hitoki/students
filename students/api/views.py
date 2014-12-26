@@ -14,13 +14,12 @@ class UserView(ViewSet):
         return Response(data)
 
 
-class StudentView(ViewSet):
+class StudentView(ModelViewSet):
 
-    def list(self, request):
-        students = Student.objects.all()
-        data = StudentSerializer(students, many=True).data
+    serializer_class = StudentSerializer
 
-        return Response(data)
+    def get_queryset(self):
+        return Student.objects.all()
 
 
 class StudentGroupView(ModelViewSet):

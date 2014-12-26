@@ -1,11 +1,11 @@
 import datetime
 from django.contrib.auth.models import User
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from students.models import StudentGroup, Student
 
 
-class UserSerializer(ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 
     days_offline = SerializerMethodField()
 
@@ -19,10 +19,7 @@ class UserSerializer(ModelSerializer):
         return diff.days
 
 
-class StudentSerializer(ModelSerializer):
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
@@ -30,7 +27,7 @@ class StudentSerializer(ModelSerializer):
                   'birth_date', 'student_card', 'group', 'student_name',)
 
 
-class StudentGroupSerializer(ModelSerializer):
+class StudentGroupSerializer(serializers.ModelSerializer):
 
     students = StudentSerializer(source='student_set.all', many=True)
     steward = StudentSerializer(many=False)
@@ -42,7 +39,7 @@ class StudentGroupSerializer(ModelSerializer):
     def create(self, validated_data):
         steward_data = validated_data.pop('steward')
         group = StudentGroup.objects.create(**validated_data)
-        Student.objects.create(group=group, **steward_data)
+        Student.objects.filter(**steward_data).update(group=group)
         return group
 
     def update(self, instance, validated_data):
