@@ -7,22 +7,46 @@
         $http.defaults.headers.common["Content-Type"] = "application/x-www-form-urlencoded";
     });
 
-    app.controller('StudentsController', ['$http', function ($http) {
-        var student = this;
-        student.students = [];
+    app.controller('StudentsController', function ($scope, $http) {
+
+        $scope.students = [];
+        $scope.edit_student = {};
+        $scope.delete_student = {};
 
         $http.get('/api/v1/students/').success(function (data) {
             console.log(data);
-            student.students = data;
+            $scope.students = data;
         });
-    }]);
+
+        $scope.showAddStudentForm = function (student) {
+            $scope.add_student = student;
+            angular.element('#add-student').modal('show');
+        };
+
+
+        $scope.createStudent = function(){
+            $http.put('/api/v1/students/', $scope.students)
+                .success(function(response){
+                    $scope.students.push(response.students);
+                    })
+        };
+
+        $scope.deleteStudent = function (index, id) {
+            $http.delete('/api/v1/students/' + id).success(function () {
+                 $scope.students.splice(index, 1);
+                angular.element('#delete-student').modal('hide');
+            });
+        };
+
+    });
+
 
     app.controller('GroupsController', function ($scope, $http) {
 
         $scope.students_groups = [];
         $scope.edit_group = {};
-        $scope.add_group = {};
         $scope.delete_group = {};
+        $scope.add_group = {};
 
         $http.get('/api/v1/students_groups/').success(function (data) {
             console.log(data);
@@ -46,36 +70,36 @@
             });
         };
 
-
-
         $scope.showDeleteForm = function (student) {
             $scope.students_groups.students = student;
             angular.element('#delete-student').modal('show');
         };
 
-        $scope.deleteStudent = function (index, id) {
+        $scope.showAddForm = function (group){
+            $scope.add_group = group;
+            angular.element('#add-group').modal('show');
+        };
 
-            $http.delete('/api/v1/students_delete/'+id).success(function(){
-                $scope.students_groups.students.splice(index, 1).success(function () {
-                angular.element('#delete-student').modal('hide');
+        $scope.addGroup = function (){
+            $http.put('/api/v1/students_groups/', $scope.students_groups).success(function () {
+                    $scope.students_groups.push($scope.students_groups);
+                angular.element('#add-group').modal('hide');
             });
-        });
 
+        $scope.addStudentInGroupForm = function (group){
+            $scope.students_groups = group;
+            angular.element('#add-student-to-group').modal('show');
+        };
 
-
-
-//        $scope.showAddForm = function (group){
-//            $scope.add_group = group;
-//            angular.element('#add-group').modal('show');
-//        };
+//            var data = { 'group': $scope.add_group};
 //
-//        $scope.addGroup = function (group){
-//            $http.put('/api/v1/students_groups/'+$scope.add_group.id, $scope.add_group).success(function () {
-//                angular.element('#add-group').modal('close');
-//            })
-//        };
+//            $http.put('/api/v1/students_groups/', $scope.add_group).success(function (data) {
+//                console.log(data);
+//            });
 
-        }
+
+        };
+
     });
 
     app.directive('customPopover', function () {
@@ -93,10 +117,6 @@
                 });
             }
         };
-    });
-
-    app.controller('addCtrl', function (){
-
     });
 
 })();

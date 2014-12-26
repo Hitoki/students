@@ -4,12 +4,12 @@ from django.dispatch import receiver
 
 
 class Student(models.Model):
-    first_name = models.CharField(max_length=255)
-    second_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    birth_date = models.DateField(auto_now=False)
-    student_card = models.IntegerField()
-    group = models.ForeignKey('StudentGroup')
+    first_name = models.CharField(max_length=255, blank=True)
+    second_name = models.CharField(max_length=255, blank=True)
+    last_name = models.CharField(max_length=255, blank=True)
+    birth_date = models.DateField(auto_now=False, blank=True)
+    student_card = models.IntegerField(blank=True)
+    group = models.ForeignKey('StudentGroup', blank=True)
 
     def __unicode__(self):
         return self.second_name
@@ -23,7 +23,7 @@ class Student(models.Model):
 
 class StudentGroup(models.Model):
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, blank=True)
     steward = models.ForeignKey(Student, null=True, blank=True)
 
     def __unicode__(self):

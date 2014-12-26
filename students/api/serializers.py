@@ -21,6 +21,9 @@ class UserSerializer(ModelSerializer):
 
 class StudentSerializer(ModelSerializer):
 
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
     class Meta:
         model = Student
         fields = ('id', 'first_name', 'second_name', 'last_name',

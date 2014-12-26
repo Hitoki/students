@@ -4,22 +4,54 @@
 
 
 {% block students %}
-{#    {% verbatim %}#}
-{#    <h5>All students:</h5>#}
-{#    <div class="scrollbox">#}
-{##}
-{#        <ul>#}
-{#            <li ng-repeat="student in student.students" class="lister" custom-popover popover-placement="right" popover-label="{{student.student_name}}" popover-html="#}
-{#                  <ul>#}
-{#                    <li>{{ student.first_name }} {{ student.second_name }} {{ student.last_name }}</li>#}
-{#                    <li>Birth data: {{ student.birth_date }}</li>#}
-{#                    <li>Card id: {{ student.student_card }}</li>#}
-{#                  </ul>">#}
-{#            </li>#}
-{#        </ul>#}
-{#    </div>#}
-{##}
-{#    {% endverbatim %}#}
+    {% verbatim %}
+    <div class="container" ng-controller="StudentsController as student">
+
+            <div class="modal fade" id="add-student">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Add new Student</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" class="form-signin" role="form" >
+                                <div class="form-group">
+                                    <label for="first_name">First name</label>
+                                    <input class="form-control" type="text" id="first_name" ng-model="student.first_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="second_name">Second name</label>
+                                    <input class="form-control" type="text" id="second_name" ng-model="student.second_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="last_name">Last name</label>
+                                    <input class="form-control" type="text" id="last_name" ng-model="student.last_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="birth_date">Birth date</label>
+                                    <input class="form-control" type="datetime" id="birth_date" ng-model="student.birth_date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="student_card">Card ID</label>
+                                    <input class="form-control" type="text" id="student_card" ng-model="student.student_card">
+                                </div>
+                                <div class="form-group">
+                                    <label for="group">Group</label>
+                                    <input class="form-control" type="text" id="group" ng-model="student.group" value="{{ students_groups.title }}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input class="btn btn-primary" type="button" value="Confirm" ng-click="createStudent()"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+    {% endverbatim %}
 {% endblock %}
 
 {% block groups %}
@@ -30,7 +62,7 @@
                     <div class="panel-heading">{{ group.title }} <span class="badge" title="{{ group.students.length }} student(s) in group" >{{ group.students.length }}</span>
                         <div class="btn-group pull-right" role="group">
                             <button title="Edit group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" ng-click="showEditForm(group)"></span></button>
-                            <button title="Add new student to the group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
+                            <button title="Add new student to the group" class="btn btn-default btn-xs" ng-click="addStudentInGroupForm(group)"><span class="glyphicon glyphicon-plus"></span></button>
                             <button title="Delete group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" ng-click="deleteGroup($index, group.id)"></span></button>
                         </div>
                     </div>
@@ -88,8 +120,8 @@
                                 <div class="form-group">
                                     <label for="students">Edit Students:</label>
                                         <div ng-repeat="student in edit_group.students" id="students">
-                                            {{ student.student_name }}<button title="Delete student" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" ng-click="showDeleteForm(student)"></span></button><br>
-
+                                            {{ student.student_name }}<button title="Delete student" class="btn btn-default btn-xs">
+                                            <span class="glyphicon glyphicon-remove" ng-click="showDeleteForm(student)"></span></button><br>
                                         </div>
                                     </div>
                             </form>
@@ -97,6 +129,49 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <input class="btn btn-primary" type="button" value="Confirm" ng-click="saveGroup()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="add-student-to-group">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Add new student to group {{ student_group.title }}.</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" class="form-signin" role="form" >
+                                <div class="form-group">
+                                    <label for="first_name"></label>
+                                    <input class="form-control" type="text" id="first_name" ng-model="student.first_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="second_name"></label>
+                                    <input class="form-control" type="text" id="second_name" ng-model="student.second_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="last_name"></label>
+                                    <input class="form-control" type="text" id="last_name" ng-model="student.last_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="birth_date"></label>
+                                    <input class="form-control" type="text" id="birth_date" ng-model="student.birth_date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="student_card"></label>
+                                    <input class="form-control" type="text" id="student_card" ng-model="student.student_card">
+                                </div>
+                                <div class="form-group">
+                                    <label for="group"></label>
+                                    <input class="form-control" type="text" id="group" ng-model="student.group" value="{{ students_groups.title }}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input class="btn btn-primary" type="button" value="Confirm" ng-click="addStudentInGroup()"/>
                         </div>
                     </div>
                 </div>
@@ -116,24 +191,22 @@
                                     <input class="form-control" type="text" id="title" placeholder="Enter title" ng-model="add_group.title">
                                 </div>
                                 <div class="form-group">
-                                    <label for="student">Add Student to group:</label>
-                                    <select class="form-control" id="student" ng-model="add_group.student" ng-options="obj.student_name for obj in students track by obj.id"></select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="steward">Add Steward:</label>
-                                    <select class="form-control" id="steward" ng-model="add_group.steward" ng-options="obj.student_name for obj in edit_group.students track by obj.id"></select>
+                                    <label for="steward">Steward:</label>
+                                    <select class="form-control" id="steward" ng-model="add_group.steward" ng-controller="StudentsController" ng-required="false">
+                                        <option ng-repeat="student in students">{{ student.student_name }}</option>
+                                    </select>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input class="btn btn-primary" type="button" value="Confirm" ng-click="addGroup"/>
+                            <input class="btn btn-primary" type="button" value="Confirm" ng-click="addGroup()"/>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal fade" id="delete-student">
+            <div class="modal fade" id="delete-student" ng-controller="StudentsController as student">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -142,7 +215,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input class="btn btn-primary" type="button" value="Delete" ng-click="deleteStudent($index)"/>
+                            <input class="btn btn-primary" type="button" value="Delete" ng-click="deleteStudent($index, students_groups.students.id)"/>
                         </div>
                     </div>
                 </div>
