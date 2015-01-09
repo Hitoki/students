@@ -29,18 +29,12 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class StudentGroupSerializer(serializers.ModelSerializer):
 
-    students = StudentSerializer(source='student_set.all', many=True)
-    steward = StudentSerializer(many=False)
+    students = StudentSerializer(source='student_set', many=True)
+    steward = StudentSerializer(many=False, read_only=True)
 
     class Meta:
         model = StudentGroup
         fields = ('id', 'title', 'steward', 'students')
-
-    def create(self, validated_data):
-        steward_data = validated_data.pop('steward')
-        group = StudentGroup.objects.create(**validated_data)
-        Student.objects.filter(**steward_data).update(group=group)
-        return group
 
     def update(self, instance, validated_data):
         steward_data = validated_data.pop('steward')
