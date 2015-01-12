@@ -1,17 +1,23 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+from django.views.generic.base import TemplateView, View
 from students.models import Student, StudentGroup
 from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
 
 
+class StudentGroupView(TemplateView):
+    template_name = 'ng/index.html'
 
-class StudentGroupView(ListView):
-    model = StudentGroup
-    template_name = 'index.html'
+# url(r'^page/(?P<page_name>[-\w]+)', PageView.as_view()),
+class PageView(View):
 
+    def get(self, request, page_name):
+        template_name = "ng/{}.html".format(page_name)
+        return render_to_response(template_name)
 
 class StudentGroupDetailView(DetailView):
     model = StudentGroup

@@ -30,13 +30,14 @@ class StudentSerializer(serializers.ModelSerializer):
 class StudentGroupSerializer(serializers.ModelSerializer):
 
     students = StudentSerializer(source='student_set', many=True)
-    steward = StudentSerializer(many=False, read_only=True)
+    steward = StudentSerializer(many=False)
 
     class Meta:
         model = StudentGroup
         fields = ('id', 'title', 'steward', 'students')
 
     def update(self, instance, validated_data):
+        print validated_data
         steward_data = validated_data.pop('steward')
 
         steward = None
@@ -84,3 +85,5 @@ class StudentGroupSerializer(serializers.ModelSerializer):
 #     deleter.model = str(sender._meta.model_name)
 #     deleter.log = 'Object {} was deleted'.format(instance)
 #     deleter.save()
+
+# add element with if

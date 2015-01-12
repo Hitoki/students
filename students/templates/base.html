@@ -8,7 +8,7 @@
     <script src='http://code.jquery.com/jquery-1.7.1.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-{#    <script src="https://code.angularjs.org/1.2.28/angular-route.min.js"></script>#}
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-route.js"></script>
     <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -19,17 +19,16 @@
     <script src="{% static "js/jsboot.js" %}"></script>
     <title>Students</title>
 </head>
-    <body ng-controller="StudentsController as student">
+    <body>
         <nav class="'navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Home</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav" ng-controller="GroupsController">
+                    <ul class="nav navbar-nav">
                         <li><a href="#" ng-click="showAddForm(group)">Add new group</a></li>
                         <li><a href="#" ng-click="showAddStudentForm(student)">Add new student</a></li>
-                        <li></li>
                     </ul>
                     <ul class="nav navbar-nav pull-right">
                          {% if user.is_authenticated %}
@@ -45,20 +44,13 @@
                 </div>
             </div>
         </nav>
-            <div class="page-header">
-                <h1></h1>
-            </div>
+        <div class="page-header">
+            <h1></h1>
+        </div>
 
-        {% block students %}
-        {% endblock %}
+        <div ng-view>
 
-    <div>
+        </div>
 
-        {% block groups %}
-        {% endblock %}
-
-    </div>
-    {% block main %}
-    {% endblock %}
     </body>
 </html>

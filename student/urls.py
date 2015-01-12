@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth.views import logout, login
 from students.views import StudentGroupView, StudentGroupDetailView, RegistrationView, \
-    AddStudent, AddGroup, StudentUpdate, GroupUpdate, GroupDelete, StudentDelete, StudentProfileView
+    AddStudent, AddGroup, StudentUpdate, GroupUpdate, GroupDelete, StudentDelete, StudentProfileView, PageView
 from rest_framework.routers import DefaultRouter
 from students.api import views
 
@@ -32,4 +32,5 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', login, name='login'),
     url(r'^accounts/logout/$', logout, name='logout'),
     url(r'^registration/$', RegistrationView.as_view(), name='registration'),
+    url(r'^page/(?P<page_name>[-\w]+)', PageView.as_view()),
 )
