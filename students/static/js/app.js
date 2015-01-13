@@ -218,7 +218,8 @@
         $scope.deleteStudent = function (index){
             $http.delete('/api/v1/students/'+$routeParams.student_id).success(function(){
                 $rootScope.students.splice(index, 1);
-                angular.element('#student-delete').modal('hide')
+                angular.element('#student-delete').modal('hide');
+                angular.element('#edit-group').modal('hide');
             });
         };
 
