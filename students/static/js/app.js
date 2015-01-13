@@ -7,170 +7,269 @@
         $http.defaults.headers.common["Content-Type"] = "application/x-www-form-urlencoded";
     });
 
-    app.directive('onFinishRender', function ($timeout) {
-        return {
-            restrict: 'A',
-            link: function (scope, element, attr) {
-                if (scope.$last === true) {
-                    $timeout(function () {
-                        scope.$emit('ngRepeatFinished');
-                    });
+    app.controller('mainCtrl', function ($rootScope, $http) {
+        $http.get('/api/v1/students_groups/').success(function (data) {
+            $rootScope.groups = data;
+        });
+    });
+
+    app.controller('GroupController', function ($scope, $routeParams, $http) {
+        $http.get('/api/v1/students_groups/'+$routeParams.group_id).success(function (data) {
+            $scope.group = data;
+            angular.element('#group-detail').modal('show');
+
+            angular.element('#group-detail').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
+        });
+    });
+
+    app.controller('EditGroupController', function ($scope, $rootScope, $routeParams, $http) {
+
+        function showEditPopup(groups) {
+            $scope.group = null;
+
+            for (var i=0; i<groups.length; i++) {
+                if(groups[i].id == $routeParams.group_id) {
+                    $scope.group = groups[i];
+                    break;
                 }
             }
+
+            angular.element('#edit-group').modal('show');
+
+            angular.element('#edit-group').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
         }
-    });
 
-    app.controller('mainCtrl', function ($scope, $http) {
-
-        $scope.students = [];
-        $scope.edit_student = {};
-        $scope.delete_student = {};
-
-        $scope.showAddForm = function (group){
-            $scope.add_group = {
-                title: null,
-                steward: {
-                    first_name: null,
-                    second_name: null,
-                    last_name: null,
-                    birth_date: null,
-                    student_card: null,
-                    group: null
-                },
-                students: null
-            };
-            angular.element('#add-group').modal('show');
-        };
-
-        $scope.showAddSinGForm = function (group){
-            $scope.sin_groups = group;
-            angular.element('#add-student-to-group').modal('show');
-         };
-
-        $http.get('/api/v1/students/').success(function (data) {
-            $scope.students = data;
-        });
-
-        $scope.showAddStudentForm = function () {
-            $scope.add_student = {
-                first_name: null,
-                second_name: null,
-                last_name: null,
-                birth_date: null,
-                student_card: null,
-                group: null
-            };
-            angular.element('#add-student').modal('show');
-        };
-
-
-        $scope.createStudent = function(){
-            $scope.add_student.group = $scope.add_student.group.id;
-            $http.post('/api/v1/students/', $.param($scope.add_student)).success(function(data){
-                $scope.students.push(data);
-                angular.element('#add-student').modal('hide')
+        $scope.saveEditGroup = function () {
+            $http.put('/api/v1/students_groups/'+$routeParams.group_id, $scope.group).success (function () {
+                angular.element('#edit-group').modal('hide');
             });
         };
 
-        $scope.deleteStudent = function (index, id) {
-            $http.delete('/api/v1/students/' + id).success(function () {
-                $scope.students.splice(index, 1);
-                angular.element('#delete-student').modal('hide');
+        if ($rootScope.groups) {
+            showEditPopup($rootScope.groups);
+        } else {
+            $http.get('/api/v1/students_groups/').success(function (data) {
+                $rootScope.groups = data;
+                showEditPopup($rootScope.groups);
             });
-        };
+        }
 
     });
 
+    app.controller('AddStudentInGroupCtrl', function ($scope, $rootScope, $routeParams, $http) {
 
-    app.controller('GroupsController', function ($scope, $routeParams, $http) {
+        function showAddStudentInGroupPopup(groups) {
+            $scope.group = null;
 
-        $scope.students_groups = [];
-        $scope.edit_group = {};
-        $scope.delete_group = {};
-        $scope.add_group = {};
-        $scope.sin_groups = {};
-
-
-        $http.get('/api/v1/students_groups/').success(function (data) {
-            $scope.students_groups = data;
-        });
-
-        $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-            if($routeParams.group) {
-                $('#student-list-'+$routeParams.group).modal('show');
+            for (var i = 0; i < groups.length; i++) {
+                if (groups[i].id == $routeParams.group_id) {
+                    $scope.group = groups[i];
+                    break;
+                }
             }
-        });
 
-        $scope.addSinG = function(){
-            $scope.add_student.group = $scope.sin_groups.id;
-            $http.post('/api/v1/students/', $.param($scope.add_student)).success(function(data){
-                $scope.students.push(data);
-                $scope.sin_groups.students.push(data);
+            $http.get('/api/v1/students/').success(function (data) {
+               $rootScope.students = data;
+            });
+
+            angular.element('#add-student-in-group').modal('show');
+
+            angular.element('#add-student-in-group').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
+        }
+
+        var default_student = {
+            first_name: null,
+            second_name: null,
+            last_name: null,
+            birth_date: null,
+            student_card: null,
+            group: null
+        };
+
+        $scope.student = angular.copy(default_student);
+
+        $scope.addStudentInGroup = function () {
+            $scope.student.group = $routeParams.group_id;
+            $http.post('/api/v1/students/', $.param($scope.student)).success(function(data){
+                $rootScope.students.push(data);
+                $scope.group.students.push(data);
+                $scope.student = default_student;
             });
         };
+
+        if ($rootScope.groups) {
+            showAddStudentInGroupPopup($rootScope.groups);
+        } else {
+            $http.get('/api/v1/students_groups/').success(function (data) {
+                $rootScope.groups = data;
+
+                showAddStudentInGroupPopup($rootScope.groups);
+            });
+        }
+
+    });
+
+    app.controller('AddGroupCtrl', function ($scope, $rootScope, $routeParams, $http) {
+
+            angular.element('#add-group').modal('show');
+
+            angular.element('#add-group').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
 
         $scope.addGroup = function (){
-            $http.post('/api/v1/students_groups/', $.param($scope.add_group)).success(function (data) {
-                $scope.students_groups.push(data);
+            $http.post('/api/v1/students_groups/', $.param($scope.group)).success(function (data) {
+                $rootScope.groups.push(data);
                 angular.element('#add-group').modal('hide');
             });
         };
 
-        $scope.showEditForm = function (group) {
-            $scope.edit_group = group;
-            angular.element('#edit-group').modal('show');
-        };
+    });
 
-        $scope.saveGroup = function () {
-            console.log($scope.edit_group);
-            $http.put('/api/v1/students_groups/'+$scope.edit_group.id, $scope.edit_group).success(function () {
-                angular.element('#edit-group').modal('hide');
-            })
-        };
+    app.controller('DeleteGroupCtrl', function ($scope, $rootScope, $routeParams, $http) {
 
-        $scope.showDeleteForm = function (student) {
-            $scope.students_groups.students = student;
-            angular.element('#delete-student').modal('show');
-        };
+        function showDeleteGroupPopup(groups) {
+            $scope.group = null;
 
-        $scope.deleteGroup = function (index, id) {
-            $http.delete('/api/v1/students_groups/'+id).success(function(){
-                $scope.students_groups.splice(index, 1);
+            for (var i=0; i<groups.length; i++) {
+                if(groups[i].id == $routeParams.group_id) {
+                    $scope.group = groups[i];
+                    break;
+                }
+            }
+
+            angular.element('#group-delete').modal('show');
+
+            angular.element('#group-delete').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
+        }
+
+        $scope.deleteGroup = function (index){
+            $http.delete('/api/v1/students_groups/'+$routeParams.group_id).success(function(){
+                $rootScope.groups.splice(index, 1);
+                angular.element('#group-delete').modal('hide')
             });
         };
+
+        if ($rootScope.groups) {
+            showDeleteGroupPopup($rootScope.groups);
+        } else {
+            $http.get('/api/v1/students_groups/').success(function (data) {
+                $rootScope.groups = data;
+                showDeleteGroupPopup($rootScope.groups);
+            });
+        }
+
+    });
+
+    app.controller('StudentController', function ($scope, $routeParams, $http) {
+        $http.get('/api/v1/students/'+$routeParams.student_id).success(function (data) {
+            $scope.student = data;
+            angular.element('#student-detail').modal('show');
+
+            angular.element('#student-detail').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
+        });
+    });
+
+    app.controller('AddStudentCtrl', function ($scope, $rootScope, $routeParams, $http) {
+
+        angular.element('#add-student').modal('show');
+
+        angular.element('#add-student').on('hidden.bs.modal', function () {
+            window.location.hash = '#/';
+        });
+
+        $scope.addStudent = function (){
+            $scope.student.group = $scope.student.group.id;
+            $http.post('/api/v1/students/', $.param($scope.student)).success(function (data) {
+                angular.element('#add-student').modal('hide');
+            });
+        };
+    });
+
+    app.controller('DeleteStudentCtrl', function ($scope, $rootScope, $routeParams, $http) {
+
+        function showDeleteStudentPopup(students) {
+            $scope.student = null;
+
+            for (var i=0; i<students.length; i++) {
+                if(students[i].id == $routeParams.student_id) {
+                    $scope.student = students[i];
+                    break;
+                }
+            }
+
+            angular.element('#student-delete').modal('show');
+
+            angular.element('#student-delete').on('hidden.bs.modal', function () {
+                window.location.hash = '#/';
+            });
+        }
+
+        $scope.deleteStudent = function (index){
+            $http.delete('/api/v1/students/'+$routeParams.student_id).success(function(){
+                $rootScope.students.splice(index, 1);
+                angular.element('#student-delete').modal('hide')
+            });
+        };
+
+        if ($rootScope.students) {
+            showDeleteStudentPopup($rootScope.students);
+        } else {
+            $http.get('/api/v1/students/').success(function (data) {
+                $rootScope.students = data;
+                showDeleteStudentPopup($rootScope.students);
+            });
+        }
 
     });
 
     app.config(['$routeProvider', function($routeProvider) {
-        $routeProvider.
-            when('/:group', {
-                templateUrl: '/page/group-list/',
-                controller: 'GroupsController'
-            }).when('/students/:students.id', {
-                templateUrl: 'templates/student-detail.html',
-                controller: 'StudentDetailCtrl'
-            }).when('/', {
-                templateUrl: '/page/group-list/',
-                controller: 'GroupsController'
-            })
-            .otherwise({
-                redirectTo: '/'
+        $routeProvider.when('/', {
+                controller: 'mainCtrl'
+            }).when('/:group_id', {
+                templateUrl: '/page/group-detail/',
+                controller: 'GroupController'
+            }).when('/:group_id/edit/', {
+                templateUrl: '/page/group-edit/',
+                controller: 'EditGroupController'
+            }).when('/group/add/', {
+                templateUrl: '/page/add-group/',
+                controller: 'AddGroupCtrl'
+            }).when('/:group_id/delete/', {
+                templateUrl: '/page/group-delete/',
+                controller: 'DeleteGroupCtrl'
+            }).when('/student/:student_id', {
+                templateUrl: '/page/student-detail/',
+                controller: 'StudentController'
+            }).when('/student-profile/add', {
+                templateUrl: '/page/add-student/',
+                controller: 'AddStudentCtrl'
+            }).when('/student/:student_id/delete', {
+                templateUrl: '/page/student-delete/',
+                controller: 'DeleteStudentCtrl'
+            }).when('/:group_id/add_student/', {
+                templateUrl: '/page/add-student-in-group/',
+                controller: 'AddStudentInGroupCtrl'
             });
-    }]);
-
-    app.controller('groupDetailController', ['$scope', '$http', function ($scope, $http) {
-//        $http.get('/api/v1/students/?format=json').success(function(data) {
-//            $scope.students = data;
-//        });
-        console.log(123);
-//        $('.student-list').first().modal('show');
-    }]);
-
-    app.controller('StudentDetailCtrl', ['$scope', '$routeParams', function(
-        $scope, $routeParams, $http) {
-        $http.get('/api/v1/students/' + $routeParams.students.id +'.json').success(function(data) {
-            $scope.students = data;
-        });
+//            .otherwise({
+//                redirectTo: '/'
+//            }).when('/:group', {
+//                templateUrl: '/page/group-list/',
+//                controller: 'GroupsController'
+//            }).when('/students/:students.id', {
+//                templateUrl: 'templates/student-detail.html',
+//                controller: 'StudentDetailCtrl'
+//            });
     }]);
 })();
 

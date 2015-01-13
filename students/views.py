@@ -12,12 +12,13 @@ from students.form import AddStudentForm, AddGroupForm, EmailUserCreationForm
 class StudentGroupView(TemplateView):
     template_name = 'ng/index.html'
 
-# url(r'^page/(?P<page_name>[-\w]+)', PageView.as_view()),
+
 class PageView(View):
 
     def get(self, request, page_name):
         template_name = "ng/{}.html".format(page_name)
         return render_to_response(template_name)
+
 
 class StudentGroupDetailView(DetailView):
     model = StudentGroup
