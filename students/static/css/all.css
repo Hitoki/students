@@ -12,3 +12,7 @@ ul {
 .lister {
     color: #5e56c1;
 }
+.modal-backdrop {
+    opacity: 0 !important;
+    position: inherit !important;
+}

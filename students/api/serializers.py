@@ -30,14 +30,13 @@ class StudentSerializer(serializers.ModelSerializer):
 class StudentGroupSerializer(serializers.ModelSerializer):
 
     students = StudentSerializer(source='student_set', many=True)
-    steward = StudentSerializer(many=False)
+    steward = StudentSerializer(many=False, allow_null=True, required=False)
 
     class Meta:
         model = StudentGroup
         fields = ('id', 'title', 'steward', 'students')
 
     def update(self, instance, validated_data):
-        print validated_data
         steward_data = validated_data.pop('steward')
 
         steward = None

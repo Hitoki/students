@@ -7,10 +7,21 @@
         $http.defaults.headers.common["Content-Type"] = "application/x-www-form-urlencoded";
     });
 
+    var get_group = function (groups, group_id) {
+        var group = null;
+        $.each(groups, function() {
+            if(this.id == group_id) {
+                group = this;
+            }
+        });
+        return group;
+    };
+
     app.controller('mainCtrl', function ($rootScope, $http) {
         $http.get('/api/v1/students_groups/').success(function (data) {
             $rootScope.groups = data;
         });
+
     });
 
     app.controller('GroupController', function ($scope, $routeParams, $http) {
@@ -27,14 +38,7 @@
     app.controller('EditGroupController', function ($scope, $rootScope, $routeParams, $http) {
 
         function showEditPopup(groups) {
-            $scope.group = null;
-
-            for (var i=0; i<groups.length; i++) {
-                if(groups[i].id == $routeParams.group_id) {
-                    $scope.group = groups[i];
-                    break;
-                }
-            }
+            $scope.group = get_group(groups, $routeParams.group_id);
 
             angular.element('#edit-group').modal('show');
 
@@ -63,14 +67,7 @@
     app.controller('AddStudentInGroupCtrl', function ($scope, $rootScope, $routeParams, $http) {
 
         function showAddStudentInGroupPopup(groups) {
-            $scope.group = null;
-
-            for (var i = 0; i < groups.length; i++) {
-                if (groups[i].id == $routeParams.group_id) {
-                    $scope.group = groups[i];
-                    break;
-                }
-            }
+            $scope.group = get_group(groups, $routeParams.group_id);
 
             $http.get('/api/v1/students/').success(function (data) {
                $rootScope.students = data;
@@ -117,13 +114,14 @@
 
     app.controller('AddGroupCtrl', function ($scope, $rootScope, $routeParams, $http) {
 
-            angular.element('#add-group').modal('show');
+        angular.element('#add-group').modal('show');
 
-            angular.element('#add-group').on('hidden.bs.modal', function () {
-                window.location.hash = '#/';
-            });
+        angular.element('#add-group').on('hidden.bs.modal', function () {
+            window.location.hash = '#/';
+        });
 
         $scope.addGroup = function (){
+            console.log($scope.group);
             $http.post('/api/v1/students_groups/', $.param($scope.group)).success(function (data) {
                 $rootScope.groups.push(data);
                 angular.element('#add-group').modal('hide');
@@ -135,14 +133,7 @@
     app.controller('DeleteGroupCtrl', function ($scope, $rootScope, $routeParams, $http) {
 
         function showDeleteGroupPopup(groups) {
-            $scope.group = null;
-
-            for (var i=0; i<groups.length; i++) {
-                if(groups[i].id == $routeParams.group_id) {
-                    $scope.group = groups[i];
-                    break;
-                }
-            }
+            $scope.group = get_group(groups, $routeParams.group_id);
 
             angular.element('#group-delete').modal('show');
 

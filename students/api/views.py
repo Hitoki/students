@@ -29,4 +29,7 @@ class StudentGroupView(ModelViewSet):
     def get_queryset(self):
         return StudentGroup.objects.all()
 
-
+    def create(self, request, *args, **kwargs):
+        group = StudentGroup.objects.create(title=request.POST['title'])
+        serializer = self.get_serializer(group)
+        return Response(serializer.data)
