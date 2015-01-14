@@ -1,0 +1,24 @@
+{% verbatim %}
+<div class="modal fade student-list" id="group-detail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Students List of group - {{ group.title }}</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr ng-repeat="student in group.students">
+                        <td><a href="#/student/{{student.id}}">{{ student.student_name }}</a></td>
+                        <td><a href="#/student/{{student.id}}">{{ student.birth_date }}</a></td>
+                        <td><a href="#/student/{{student.id}}">{{ student.student_card }}</a></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <a href="#/" type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}

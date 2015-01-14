@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html ng-app="students">
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='http://code.jquery.com/jquery-1.9.1.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-route.js"></script>
+    <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static "css/all.css" %}">
+    <script src="{% static "js/angular-cookie.js" %}"></script>
+    <script src="{% static "js/app.js" %}"></script>
+    <script src="{% static "js/student.js" %}"></script>
+    <script src="{% static "js/jsboot.js" %}"></script>
+    <title>Students</title>
+</head>
+<body ng-controller="mainCtrl">
+    <nav class="'navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Home</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#/group/add/" ng-click="showAddGroupPopup()">Add new group</a></li>
+                    <li><a href="#/student-profile/add/" ng-click="showAddStudentPopup()">Add new student</a></li>
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                     {% if user.is_authenticated %}
+                        <li>
+                            <a href="#">{{ user }} ( DEBUG={{ settings.DEBUG }} )</a>
+                        </li>
+                        <li><a href="/accounts/logout/">Log Out</a></li>
+                    {% else %}
+                        <li><a href="/accounts/login/">Log In</a></li>
+                        <li><a href="/registration/">Registration</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="page-header">
+        <h1></h1>
+    </div>
+    {% verbatim %}
+    <div class="container">
+        <div class="col-xs-6 col-md-4" ng-repeat="group in groups">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ group.title }}
+                    <span class="badge" title="{{ group.students.length }} student(s) in group" ng-bind="group.students.length"></span>
+                    <div class="btn-group pull-right" role="group">
+                        <a href="#/{{ group.id }}/edit" title="Edit group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" ng-click="showEditPopup()"></span></a>
+                        <a href="#/{{ group.id }}/add_student" title="Add new student to the group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus" ng-click="showAddStudentInGroupPopup()"></span></a>
+                        <a href="#/{{ group.id }}/delete" title="Delete group" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove" ng-click="showDeleteGroupPopup($index)"></span></a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <span>{{ group.steward.student_name }}
+                        <a href="#/{{ group.id }}" class="btn btn-success btn-xs pull-right" data-toggle="modal">
+                            <span class="glyphicon glyphicon-list"></span>
+                        </a>
+                    </span>
+                    <span ng-hide="group.steward">No Steward Yet. <button class="btn btn-link btn-xs" ng-click="showEditForm(group)">Edit?</button></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
+    <div ng-view>
+
+    </div>
+
+    <div class="modal fade" id="add-student">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add new Student</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" class="form-signin" role="form" >
+                        <div class="form-group">
+                            <label for="first_name">First name</label>
+                            <input class="form-control" type="text" id="first_name" ng-model="add_student.first_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="second_name">Second name</label>
+                            <input class="form-control" type="text" id="second_name" ng-model="add_student.second_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last name</label>
+                            <input class="form-control" type="text" id="last_name" ng-model="add_student.last_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="birth_date">Birth date</label>
+                            <input class="form-control" type="datetime" id="birth_date" placeholder="1992-10-28" ng-model="add_student.birth_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="student_card">Card ID</label>
+                            <input class="form-control" type="text" id="student_card" ng-model="add_student.student_card">
+                        </div>
+                        <div class="form-group">
+                            <label for="group">Group</label>
+                            <select class="form-control" id="group" ng-model="add_student.group" ng-options="obj.title for obj in students_groups track by obj.id"></select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input class="btn btn-primary" type="button" value="Confirm" ng-click="createStudent()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

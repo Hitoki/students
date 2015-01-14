@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% verbatim %}
+
+    <div class="container" ng-controller="StudentsController as student">
+        <div class="modal-body">
+            <table class="table">
+                <tr ng-repeat="student in students">
+                    <td>{{ student.student_name }}</td>
+                    <td>{{ student.birth_date }}</td>
+                    <td>{{ student.student_card }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endverbatim %}

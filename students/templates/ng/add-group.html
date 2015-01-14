@@ -1,0 +1,24 @@
+{% verbatim %}
+<div class="modal fade" id="add-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add new group</h4>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" class="form-signin" role="form" >
+                    <div class="form-group">
+                        <label for="title">Group title:</label>
+                        <input class="form-control" type="text" id="title" placeholder="Enter title" ng-model="group.title">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input class="btn btn-primary" type="button" value="Confirm" ng-click="addGroup()"/>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}
